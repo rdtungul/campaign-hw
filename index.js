@@ -1,29 +1,36 @@
-document.getElementById("contactForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("contactForm");
+  const responseDiv = document.getElementById("formResponse");
 
-      const form = e.target;
-      const data = {
-        name: form.name.value,
-        email: form.email.value,
-        message: form.message.value
-      };
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // stop form from refreshing the page
 
-      try {
-        const response = await fetch("https://webhook-test.com/api/webhooks/cac25144934d229b4fa9eedcc6a9733a", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
+    // Collect form data
+    const formData = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      message: form.message.value.trim(),
+    };
 
-        if (response.ok) {
-          document.getElementById("formResponse").innerText = "✅ Thank you! Your message has been sent.";
-          form.reset();
-        } else {
-          document.getElementById("formResponse").innerText = "⚠️ Something went wrong. Please try again.";
-        }
-      } catch (error) {
-        document.getElementById("formResponse").innerText = "❌ Failed to connect to server.";
+    try {
+      // Send data to Zapier webhook
+      const response = await fetch("https://hooks.zapier.com/hooks/catch/11800156/umgb4jj/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        responseDiv.innerHTML = `<span class="text-success">✅ Thank you! Your message has been sent.</span>`;
+        form.reset();
+      } else {
+        responseDiv.innerHTML = `<span class="text-danger">❌ Oops! Something went wrong. Please try again.</span>`;
       }
-    });
+    } catch (error) {
+      console.error("Error:", error);
+      responseDiv.innerHTML = `<span class="text-danger">⚠️ Failed to send. Check your connection.</span>`;
+    }
+  });
+});
