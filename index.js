@@ -1,4 +1,4 @@
-const form = document.getElementById("contactForm");
+  const form = document.getElementById("contactForm");
   const responseMsg = document.getElementById("formResponse");
 
   form.addEventListener("submit", async (e) => {
@@ -11,7 +11,7 @@ const form = document.getElementById("contactForm");
     };
 
     try {
-      const res = await fetch("https://webhook-test.com/api/webhooks/cac25144934d229b4fa9eedcc6a9733a", {
+      const res = await fetch("https://hooks.zapier.com/hooks/catch/11800156/umg4nj2/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -20,11 +20,11 @@ const form = document.getElementById("contactForm");
       });
 
       if (res.ok) {
-        responseMsg.textContent = "✅ Thank you! Your message has been sent.";
+        responseMsg.textContent = "✅ Message sent successfully to Zapier!";
         responseMsg.className = "mt-2 small text-success";
         form.reset();
       } else {
-        responseMsg.textContent = "⚠️ Oops! Something went wrong.";
+        responseMsg.textContent = "⚠️ Failed to send message to Zapier.";
         responseMsg.className = "mt-2 small text-danger";
       }
     } catch (err) {
