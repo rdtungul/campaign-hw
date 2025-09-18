@@ -1,34 +1,25 @@
-  const form = document.getElementById("contactForm");
-  const responseMsg = document.getElementById("formResponse");
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  const formData = new FormData(form);
 
-    const data = {
-      name: form.name.value,
-      email: form.email.value,
-      message: form.message.value,
-    };
+  try {
+    const res = await fetch("https://hooks.zapier.com/hooks/catch/11800156/umg4nj2/", {
+      method: "POST",
+      body: formData, // no headers → avoids CORS preflight
+    });
 
-    try {
-      const res = await fetch("https://hooks.zapier.com/hooks/catch/11800156/umg4nj2/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        responseMsg.textContent = "✅ Message sent successfully to Zapier!";
-        responseMsg.className = "mt-2 small text-success";
-        form.reset();
-      } else {
-        responseMsg.textContent = "⚠️ Failed to send message to Zapier.";
-        responseMsg.className = "mt-2 small text-danger";
-      }
-    } catch (err) {
-      responseMsg.textContent = "❌ Error: " + err.message;
-      responseMsg.className = "mt-2 small text-danger";
+    if (res.ok) {
+      responseMsg.textContent = "✅ Sent to Zapier!";
+      responseMsg.style.color = "green";
+      form.reset();
+    } else {
+      responseMsg.textContent = "❌ Failed to send.";
+      responseMsg.style.color = "red";
     }
-  });
+  } catch (err) {
+    console.error("Error submitting form:", err);
+    responseMsg.textContent = "⚠️ Network error.";
+    responseMsg.style.color = "red";
+  }
+});

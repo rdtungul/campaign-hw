@@ -333,6 +333,45 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Webhook Form Script -->
-<script src="index.js"></script>
+<script>
+  const form = document.getElementById("contactForm");
+  const responseMsg = document.getElementById("formResponse");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Collect values
+    const data = {
+      name: form.name.value,
+      email: form.email.value,
+      message: form.message.value
+    };
+
+    // Convert JSON into a field Zapier can read
+    const formData = new FormData();
+    formData.append("payload", JSON.stringify(data)); // ✅ send as JSON string
+
+    try {
+      const res = await fetch("https://hooks.zapier.com/hooks/catch/11800156/umg4nj2/", {
+        method: "POST",
+        body: formData // ✅ still multipart/form-data, no CORS issues
+      });
+
+      if (res.ok) {
+        responseMsg.textContent = "✅ Sent to Zapier!";
+        responseMsg.style.color = "limegreen";
+        form.reset();
+      } else {
+        responseMsg.textContent = "❌ Failed to send.";
+        responseMsg.style.color = "red";
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      responseMsg.textContent = "⚠️ Network error.";
+      responseMsg.style.color = "red";
+    }
+  });
+</script>
+
 </body>
 </html>
