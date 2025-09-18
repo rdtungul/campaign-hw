@@ -9,7 +9,7 @@ document.getElementById("contactForm").addEventListener("submit", async function
       };
 
       try {
-        const response = await fetch("https://hooks.zapier.com/hooks/catch/11800156/umgb4jj/", {
+        const response = await fetch("https://webhook-test.com/api/webhooks/cac25144934d229b4fa9eedcc6a9733a", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
