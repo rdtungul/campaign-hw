@@ -9,7 +9,7 @@
         };
 
         try {
-        const response = await fetch("https://rdtungul.github.io", {
+        const response = await fetch("https://hooks.zapier.com/hooks/catch/11800156/umgb4jj/", {
             method: "POST",
             headers: {
             "Content-Type": "application/json"
@@ -27,3 +27,6 @@
         document.getElementById("formResponse").innerText = "❌ Failed to connect to server.";
         }
     });
+
+
+    
