@@ -1,36 +1,34 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("contactForm");
-  const responseDiv = document.getElementById("formResponse");
+const form = document.getElementById("contactForm");
+  const responseMsg = document.getElementById("formResponse");
 
   form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // stop form from refreshing the page
+    e.preventDefault();
 
-    // Collect form data
-    const formData = {
-      name: form.name.value.trim(),
-      email: form.email.value.trim(),
-      message: form.message.value.trim(),
+    const data = {
+      name: form.name.value,
+      email: form.email.value,
+      message: form.message.value,
     };
 
     try {
-      // Send data to Zapier webhook
-      const response = await fetch("https://hooks.zapier.com/hooks/catch/11800156/umgb4jj/", {
+      const res = await fetch("https://webhook-test.com/api/webhooks/cac25144934d229b4fa9eedcc6a9733a", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
-      if (response.ok) {
-        responseDiv.innerHTML = `<span class="text-success">✅ Thank you! Your message has been sent.</span>`;
+      if (res.ok) {
+        responseMsg.textContent = "✅ Thank you! Your message has been sent.";
+        responseMsg.className = "mt-2 small text-success";
         form.reset();
       } else {
-        responseDiv.innerHTML = `<span class="text-danger">❌ Oops! Something went wrong. Please try again.</span>`;
+        responseMsg.textContent = "⚠️ Oops! Something went wrong.";
+        responseMsg.className = "mt-2 small text-danger";
       }
-    } catch (error) {
-      console.error("Error:", error);
-      responseDiv.innerHTML = `<span class="text-danger">⚠️ Failed to send. Check your connection.</span>`;
+    } catch (err) {
+      responseMsg.textContent = "❌ Error: " + err.message;
+      responseMsg.className = "mt-2 small text-danger";
     }
   });
-});
